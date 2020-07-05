@@ -66,7 +66,7 @@ class App extends React.Component{
   }
   getWeather = async()=>{
     const api_call=await fetch(
-      'http://api.openweathermap.org/data/2.5/weather?q=Seoul&APPID=429736441cf3572838aa10530929f7cd');
+      'https://api.openweathermap.org/data/2.5/weather?q=Seoul&APPID=429736441cf3572838aa10530929f7cd');
 
     const response = await api_call.json();
 
