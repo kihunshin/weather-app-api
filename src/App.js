@@ -3,6 +3,7 @@ import './App.css';
 import './weather-icons/css/weather-icons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Weather from './app_component/weather.component';
+import Form from './app_component/form.component';
 
 //api call api.openweathermap.org/data/2.5/weather?q=Seoul
 class App extends React.Component{
@@ -19,7 +20,7 @@ class App extends React.Component{
       description: "",
       error: false
     };
-    this.getWeather();
+
 
     this.weatherIcon={
       Thunderstorm:"wi-thunderstorm",
@@ -64,29 +65,39 @@ class App extends React.Component{
           this.setState({icon:this.weatherIcon.Clouds});
     }
   }
-  getWeather = async()=>{
-    const api_call=await fetch(
-      'https://api.openweathermap.org/data/2.5/weather?q=Seoul&APPID=429736441cf3572838aa10530929f7cd');
+  getWeather = async(e)=>{
 
-    const response = await api_call.json();
 
-    console.log(response);
+    e.preventDefault();
 
-    this.setState({
-      city:response.name,
-      country:response.sys.country,
-      celsius: this.calCelsius(response.main.temp),
-      temp_max: this.calCelsius(response.main.temp_max),
-      temp_min:this.calCelsius(response.main.temp_min),
-      description:response.weather[0].description,
-      icon:this.weatherIcon.Thunderstorm
-    });
+    const city=e.target.elements.city.value;
+    const country=e.target.elements.city.value;
+if(city && country){
+  const api_call=await fetch(
+    `https://api.openweathermap.org/data/2.5/weather?q=${city},${country}&APPID=429736441cf3572838aa10530929f7cd`);
 
-    this.get_WeatherIcon(this.weatherIcon,response.weather[0].id);
+  const response = await api_call.json();
+
+  console.log(response);
+
+  this.setState({
+    city:`${response.name}, ${response.sys.country}`,
+    celsius: this.calCelsius(response.main.temp),
+    temp_max: this.calCelsius(response.main.temp_max),
+    temp_min:this.calCelsius(response.main.temp_min),
+    description:response.weather[0].description,
+    icon:this.weatherIcon.Thunderstorm
+  });
+
+  this.get_WeatherIcon(this.weatherIcon,response.weather[0].id);
+}else{
+  this.setState({error:true})
+}
 };
   render(){
     return (
       <div className="App">
+        <Form loadweather={this.getWeather} error={this.state.error}/>
       <Weather 
       city={this.state.city} 
       country={this.state.country} 
