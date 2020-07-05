@@ -86,7 +86,8 @@ if(city && country){
     temp_max: this.calCelsius(response.main.temp_max),
     temp_min:this.calCelsius(response.main.temp_min),
     description:response.weather[0].description,
-    icon:this.weatherIcon.Thunderstorm
+    icon:this.weatherIcon.Thunderstorm,
+    error: false
   });
 
   this.get_WeatherIcon(this.weatherIcon,response.weather[0].id);
